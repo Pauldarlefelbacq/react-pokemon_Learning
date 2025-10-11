@@ -18,6 +18,7 @@ function App(){
     }
     console.log(nb);
     
+    
 
     return(
         <main>
@@ -26,7 +27,9 @@ function App(){
             type="text" 
             value={search}
             onChange={handleChange}/>
+            
             <button 
+            className="border rounded-xl p-2 bg-gray-200"
             onClick={handleClick}>
                 Pokemon aléatoire
             </button>

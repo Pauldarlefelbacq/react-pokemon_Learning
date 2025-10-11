@@ -28,14 +28,16 @@ function PokemonDetails(){
     }
     return(
         <main>
-            <h1>Fiche de {pkm.pokemonName}</h1>
-            <div>
-                <h2>Forme de base</h2>
-                <img src={pokemonData.sprites.front_default} alt={pokemonData.name} />
-            </div>
-            <div>
-                <h2>Forme Chromatique</h2>
-                <img src={pokemonData.sprites.front_shiny} alt={pokemonData.name} />
+            <h1 className="text-4xl font-bold text-center">Fiche de {pkm.pokemonName}</h1>
+            <div className="flex justify-evenly *:flex-column *:items-center">
+                <div>
+                    <h2 className="font-bold">Forme de base</h2>
+                    <img src={pokemonData.sprites.front_default} alt={pokemonData.name} />
+                </div>
+                <div>
+                    <h2 className="font-bold">Forme Chromatique</h2>
+                    <img src={pokemonData.sprites.front_shiny} alt={pokemonData.name} />
+                </div>
             </div>
             <ul class="">
                 {pokemonData.types.map(type =>(
