@@ -2,7 +2,7 @@ import './App.css'
 import PokemonList from "./pages/PokemonList";
 import PokemonDetail from"./pages/PokemonDetail";
 import { Pokemon } from './Pokemon';
-import Battle from "./Combat"
+import Battle from "./combat"
 import { Route, Routes } from 'react-router-dom';
 
 function App(){
