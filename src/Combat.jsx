@@ -10,6 +10,10 @@ function Battle(){
     const [hpO, setHpO] = useState(null);
     const [atkJ, setAtkJ] = useState(null);
     const [atkO, setAtkO] = useState(null);
+    const [defenseJ, setDefenseJ] = useState(null);
+    const [defenseO, setDefenseO] = useState(null);
+
+    const [gameStatus, setGameStatus] = useState('en cours');
 
 // fetch des pokemons (statiques pour le moment)    
     useEffect(() => {
@@ -28,12 +32,18 @@ function Battle(){
             const playerInitialAtk = playerData.stats.find(stat => stat.stat.name === 'attack').base_stat;
             const opponentInitialAtk = opponentData.stats.find(stat => stat.stat.name === 'attack').base_stat;
 
+            const playerInitialDefense = playerData.stats.find(stat => stat.stat.name === 'defense').base_stat;
+            const opponentInitialDefense = opponentData.stats.find(stat => stat.stat.name === 'defense').base_stat;
+
             setHpJ(playerInitialHP);
             setHpO(opponentInitialHP);
 
             setAtkJ(playerInitialAtk);
             setAtkO(opponentInitialAtk);
-            console.log(playerInitialAtk);
+            
+            setDefenseJ(playerInitialDefense);
+            setDefenseO(playerInitialDefense);
+            console.log(playerInitialDefense)
             
         };
         
@@ -44,17 +54,34 @@ function Battle(){
 // Gestionnaire des attaques
         async function handlePlayerAttack(move){
             const reponse = await fetch(move.move.url);
-
             const moveDetails = await reponse.json();
             console.log(moveDetails);
             console.log("Points de vie enlevés", atkJ * (moveDetails.power / 100));
-            setHpO(hpO - atkJ * (moveDetails.power / 100));
+            const DgtJ = Math.round(((atkJ * (moveDetails.power / 100))/defenseJ)+2);
+            const newOpponentHP = hpO - DgtJ;
+            if (newOpponentHP > 0){
+                setHpO(hpO - DgtJ);
+            }
+            else{
+                setHpO(0);
+                alert("Vous avez gagné");
+                setGameStatus('gagné')
+            }
 
             const opponentMoves = pokemonO.moves.slice(0, 4);
             const randomAtk = Math.floor(Math.random() * 4);
             const randomMove = await fetch(opponentMoves[randomAtk].move.url);
             const randomDetails = await randomMove.json()
-            setHpJ(hpJ - atkO * (randomDetails.power / 100));
+            const DgtO = Math.round(((atkO * (randomDetails.power / 100))/defenseO)+2);
+            const newPlayerHP = hpJ - DgtO;
+            if (newPlayerHP > 0){
+                setHpJ(hpJ - DgtO );
+            }
+            else{
+                setHpJ(0);
+                alert("Vous avez perdu");
+                setGameStatus('perdu')
+            }
         };
 
 
@@ -74,6 +101,16 @@ function Battle(){
             </main>
         )
     }
+    if(gameStatus !== "en cours"){
+        return(
+            <main>
+                <div>
+                    <h1>Vous avez {gameStatus} !</h1>
+                    <button>Recommencer</button>
+                </div>
+            </main>
+        )
+    }
     return(
         <main>
             <div>
@@ -85,6 +122,7 @@ function Battle(){
                     {pokemonJ.moves.slice(0, 4).map(move=>(
                         <button 
                         className = "border m-1 p-2"
+                        disabled={gameStatus !== 'en cours'}
                         onClick={() =>handlePlayerAttack(move)} 
                         key={move.move.name}>
                             {move.move.name}
