@@ -8,6 +8,8 @@ function Battle(){
     const [pokemonO, setPokemonO] = useState(null);
     const [hpJ, setHpJ] = useState(null);
     const [hpO, setHpO] = useState(null);
+    const [atkJ, setAtkJ] = useState(null);
+    const [atkO, setAtkO] = useState(null);
 
 // fetch des pokemons (statiques pour le moment)    
     useEffect(() => {
@@ -23,8 +25,16 @@ function Battle(){
             const playerInitialHP = playerData.stats.find(stat => stat.stat.name === 'hp').base_stat;
             const opponentInitialHP = opponentData.stats.find(stat => stat.stat.name === 'hp').base_stat;
 
+            const playerInitialAtk = playerData.stats.find(stat => stat.stat.name === 'attack').base_stat;
+            const opponentInitialAtk = opponentData.stats.find(stat => stat.stat.name === 'attack').base_stat;
+
             setHpJ(playerInitialHP);
             setHpO(opponentInitialHP);
+
+            setAtkJ(playerInitialAtk);
+            setAtkO(opponentInitialAtk);
+            console.log(playerInitialAtk);
+            
         };
         
 
@@ -36,8 +46,15 @@ function Battle(){
             const reponse = await fetch(move.move.url);
 
             const moveDetails = await reponse.json();
-            console.log("puissance de l'attaque", moveDetails.power);
-            
+            console.log(moveDetails);
+            console.log("Points de vie enlevés", atkJ * (moveDetails.power / 100));
+            setHpO(hpO - atkJ * (moveDetails.power / 100));
+
+            const opponentMoves = pokemonO.moves.slice(0, 4);
+            const randomAtk = Math.floor(Math.random() * 4);
+            const randomMove = await fetch(opponentMoves[randomAtk].move.url);
+            const randomDetails = await randomMove.json()
+            setHpJ(hpJ - atkO * (randomDetails.power / 100));
         };
 
 
