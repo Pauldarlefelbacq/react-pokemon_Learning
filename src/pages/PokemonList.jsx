@@ -2,6 +2,9 @@ import { Pokemon } from '../Pokemon';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
+
+
 function App(){
     const navigate = useNavigate();
 
@@ -21,9 +24,10 @@ function App(){
     
 
     return(
-        <main>
+        <main className="m-2">
             <h1>pokedex</h1>
             <input 
+            className="border p-1 mx-5 rounded-md"
             type="text" 
             value={search}
             onChange={handleChange}/>
@@ -34,6 +38,7 @@ function App(){
                 Pokemon aléatoire
             </button>
             <Pokemon select={search} />
+            <Link to="/Combat">Aller aux combats</Link>
         </main>
     )
     }
