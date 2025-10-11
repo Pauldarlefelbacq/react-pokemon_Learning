@@ -39,7 +39,7 @@ function App(){
                 Pokemon aléatoire
             </button>
             <Pokemon select={search} />
-            <Link to="/Combat">Aller aux combats</Link>
+            <Link to="/combat">Aller aux combats</Link>
         </main>
     )
     }
