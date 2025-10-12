@@ -20,8 +20,10 @@ function App(){
         const randomID= Math.floor(Math.random() * 1025)+1;
         setNb(randomID);
         const randomPromise = fetch(`https://pokeapi.co/api/v2/pokemon/${randomID}`).then(res => res.json());
-        const  randomPkm = await (opponentPromise);
-        navigate(`/pokemon/${randomPkm}`);
+        const  randomPkm = await (randomPromise);
+        navigate(`/pokemon/${randomPkm.name}`);
+        console.log(randomPkm);
+        
     }
     console.log(nb);
     

@@ -1,13 +1,13 @@
 # React Pokemon
 
-A modern web application built with React for exploring and managing Pokemon data.
+Just an app featuring pokeapi, it is all for the sake of learning and getting comfortable with react.
 
 ## Features
 
 - Browse Pokemon collection
 - Search and filter functionality
-- Detailed Pokemon information
-- Responsive design
+- Random pokemon finds
+- Fight between random pokemons
 
 ## Technologies
 
