@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { Leapfrog } from 'ldrs/react'
 import 'ldrs/react/Leapfrog.css'
 
@@ -8,7 +8,7 @@ function Battle(){
     const customPlayerData = location.state?.playerPokemonData;
     let customPlayerLevel = location.state?.playerLevel;
 
-    const randomOpponent = Math.floor(Math.random() * 1025)+1;
+    
 // assignation des variables stockant les pokemons
     const [pokemonJ, setPokemonJ] = useState(null);
     const [pokemonO, setPokemonO] = useState(null);
@@ -18,7 +18,7 @@ function Battle(){
     const [atkO, setAtkO] = useState(null);
     const [defenseJ, setDefenseJ] = useState(null);
     const [defenseO, setDefenseO] = useState(null);
-    const [level, setLevel] = useState(null)
+    const [level, setLevel] = useState(null);
 
     const [gameStatus, setGameStatus] = useState('en cours');
 
@@ -34,8 +34,10 @@ function Battle(){
     useEffect(() => {
         const fetchpkmCombat = async () => {
             if(customPlayerData === undefined){
-                const playerPromise = fetch('https://pokeapi.co/api/v2/pokemon/1').then(res => res.json());
-                const opponentPromise = fetch('https://pokeapi.co/api/v2/pokemon/4').then(res => res.json());
+                const randomOps = Math.floor(Math.random()* 1025)+1;
+                const randomPlay = Math.floor(Math.random()* 1025)+1;
+                const playerPromise = fetch(`https://pokeapi.co/api/v2/pokemon/${randomOps}`).then(res => res.json());
+                const opponentPromise = fetch(`https://pokeapi.co/api/v2/pokemon/${randomPlay}`).then(res => res.json());
                 const [playerData, opponentData] = await Promise.all([playerPromise, opponentPromise]);
 
                 setPokemonJ(playerData);
@@ -54,7 +56,8 @@ function Battle(){
                 setDefenseO(statsO.defense);
             }
             else{
-                const opponentPromise = fetch(`https://pokeapi.co/api/v2/pokemon/4`).then(res => res.json());
+                const randomOps = Math.floor(Math.random()* 1025)+1;
+                const opponentPromise = fetch(`https://pokeapi.co/api/v2/pokemon/${randomOps}`).then(res => res.json());
                 const  opponentData = await (opponentPromise);
 
                 setPokemonJ(customPlayerData);
@@ -129,9 +132,9 @@ function Battle(){
     }
     if(gameStatus !== "en cours"){
         return(
-            <main>
+            <main className="flex flex-col items-center justify-center min-h-screen">
                 <div>
-                    <h1>Vous avez {gameStatus} !</h1>
+                    <h1 className="text-4xl font-bold my-12">Vous avez {gameStatus} !</h1>
                     <button
                     onClick={()=> window.location.reload()}>Recommencer</button>
                 </div>
@@ -139,17 +142,24 @@ function Battle(){
         )
     }
     return(
-        <main>
-            <div>
-                <h2>Votre pokemon</h2>
-                <img src={pokemonJ.sprites.front_default} alt={pokemonJ.name} />
+        <main className="flex items-center justify-center min-h-screen place-content-around *:mx-22">
+            <a
+                className="text-2xl font-bold hover:text-blue-400 absolute top-4 left-4" 
+                href="/">Retour à la page d'accueil
+            </a>
+            <div className="flex flex-col">
+                <h2 className="text-center">Votre pokemon</h2>
                 <p>{pokemonJ.name}</p>
-                <p>Niveau : {level}</p>
-                <p>PV : {hpJ}</p>
-                <div>
+                <p>Niveau : <strong>{level}</strong></p>
+                <img 
+                className="max-h-[96px] w-fit m-auto"
+                src={pokemonJ.sprites.front_default} 
+                alt={pokemonJ.name} />
+                <p className="">PV : {hpJ}</p>
+                <div className="content-between justify-between">
                     {pokemonJ.moves.slice(0, 4).map(move=>(
                         <button 
-                        className = "border m-1 p-2"
+                        className = "border rounded-lg  m-2 p-2 hover:scale-125 hover:bg-black hover:text-white hover:duration-300"
                         disabled={gameStatus !== 'en cours'}
                         onClick={() =>handlePlayerAttack(move)} 
                         key={move.move.name}>
@@ -163,7 +173,7 @@ function Battle(){
                 <h2>Pokemon adverse</h2>
                 <img src={pokemonO.sprites.front_default} alt={pokemonO.name} />
                 <p>{pokemonO.name}</p>
-                <p>Niveau : {level}</p>
+                <p>Niveau : <strong>{level}</strong></p>
                 <p>PV : {hpO}</p>
                 <div>
                     {pokemonO.moves.slice(0, 4).map(move=>(
