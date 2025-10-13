@@ -9,7 +9,7 @@ export function Pokemon({select}){
         useEffect(() => {
             const fetchAllPokemonData = async () => {
                 
-                const listResponse = await fetch("https://pokeapi.co/api/v2/pokemon?limit=20");
+                const listResponse = await fetch("https://pokeapi.co/api/v2/pokemon?limit=50");
                 const listData = await listResponse.json();
 
                 const detailPromises = listData.results.map(pokemon =>
