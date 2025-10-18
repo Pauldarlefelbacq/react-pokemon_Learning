@@ -117,68 +117,110 @@ function Battle(){
 // affichage global conditionnel
     if (!pokemonJ || !pokemonO){
         return(
-            <main>
-                <h1 className="text-4xl font-bold my-12">Chargement du pokemon en cours</h1>
+            <main className="flex flex-col items-center justify-center min-h-screen">
+                <h1 className="text-3xl font-bold mb-8 text-slate-800">Chargement en cours</h1>
                 <Leapfrog
                 size="100"
                 speed="1.5"
-                color="black" 
+                color="#dc2626" 
                 />
                 <a
-                className="text-2xl font-bold my-12 hover:text-blue-400" 
-                href="/">Retour à la page d'accueil</a>
+                className="text-lg font-semibold mt-8 text-red-600 hover:text-red-700 transition-colors" 
+                href="/">← Retour au pokedex</a>
             </main>
         )
     }
     if(gameStatus !== "en cours"){
         return(
             <main className="flex flex-col items-center justify-center min-h-screen">
-                <div>
-                    <h1 className="text-4xl font-bold my-12">Vous avez {gameStatus} !</h1>
+                <div className="bg-white rounded-2xl shadow-2xl p-12 border-2 border-slate-200 text-center">
+                    <h1 className="text-5xl font-bold mb-8 text-slate-800">
+                        {gameStatus === 'gagné' ? 'Victoire!' : 'Perdu'}
+                    </h1>
+                    <p className="text-xl text-slate-600 mb-8">Vous avez {gameStatus}!</p>
                     <button
-                    onClick={()=> window.location.reload()}>Recommencer</button>
+                    className="btn-primary text-lg px-8 py-3"
+                    onClick={()=> window.location.reload()}>Combattre à nouveau</button>
                 </div>
             </main>
         )
     }
     return(
-        <main className="flex items-center justify-center min-h-screen place-content-around *:mx-22">
+        <main className="min-h-screen flex items-center justify-center px-4 py-8">
             <a
-                className="text-2xl font-bold hover:text-blue-400 absolute top-4 left-4" 
-                href="/">Retour à la page d'accueil
+                className="text-slate-600 hover:text-slate-800 font-medium absolute top-6 left-6 transition-colors" 
+                href="/">← Retour au pokedex
             </a>
-            <div className="flex flex-col">
-                <h2 className="text-center">Votre pokemon</h2>
-                <p>{pokemonJ.name}</p>
-                <p>Niveau : <strong>{level}</strong></p>
-                <img 
-                className="max-h-[96px] w-fit m-auto"
-                src={pokemonJ.sprites.front_default} 
-                alt={pokemonJ.name} />
-                <p className="">PV : {hpJ}</p>
-                <div className="content-between justify-between">
-                    {pokemonJ.moves.slice(0, 4).map(move=>(
-                        <button 
-                        className = "border rounded-lg  m-2 p-2 hover:scale-125 hover:bg-black hover:text-white hover:duration-300"
-                        disabled={gameStatus !== 'en cours'}
-                        onClick={() =>handlePlayerAttack(move)} 
-                        key={move.move.name}>
-                            {move.move.name}
-                        </button>
-                    ))}
+            
+            <div className="w-full max-w-6xl grid md:grid-cols-2 gap-8">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl shadow-xl p-6 border-2 border-blue-200">
+                    <h2 className="text-center text-xl font-bold text-blue-900 mb-3">Votre pokemon</h2>
+                    <div className="bg-white rounded-xl p-4 mb-4">
+                        <p className="text-2xl font-bold capitalize text-slate-800 text-center">{pokemonJ.name}</p>
+                        <p className="text-center text-slate-600 mb-2">Niveau: <strong className="text-blue-600">{level}</strong></p>
+                        <img 
+                        className="w-32 h-32 mx-auto object-contain"
+                        src={pokemonJ.sprites.front_default} 
+                        alt={pokemonJ.name} />
+                        <div className="mt-3">
+                            <div className="flex justify-between text-sm mb-1">
+                                <span className="font-semibold text-slate-700">HP</span>
+                                <span className="font-bold text-green-600">{hpJ}</span>
+                            </div>
+                            <div className="w-full bg-slate-200 rounded-full h-3">
+                                <div 
+                                    className="bg-gradient-to-r from-green-400 to-green-600 h-3 rounded-full transition-all duration-300"
+                                    style={{width: `${Math.max(0, Math.min(100, (hpJ / (Math.floor((pokemonJ.stats.find(stat => stat.stat.name === 'hp').base_stat)/50 * level)) * 100)))}%`}}
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                        {pokemonJ.moves.slice(0, 4).map(move=>(
+                            <button 
+                            className="bg-white border-2 border-blue-300 rounded-lg p-3 font-semibold text-slate-700 hover:bg-blue-500 hover:text-white hover:border-blue-500 transition-all duration-200 capitalize text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={gameStatus !== 'en cours'}
+                            onClick={() =>handlePlayerAttack(move)} 
+                            key={move.move.name}>
+                                {move.move.name.replace('-', ' ')}
+                            </button>
+                        ))}
+                    </div>
                 </div>
-            </div>
 
-            <div>
-                <h2>Pokemon adverse</h2>
-                <img src={pokemonO.sprites.front_default} alt={pokemonO.name} />
-                <p>{pokemonO.name}</p>
-                <p>Niveau : <strong>{level}</strong></p>
-                <p>PV : {hpO}</p>
-                <div>
-                    {pokemonO.moves.slice(0, 4).map(move=>(
-                        <button key={move.move.name}>{move.move.name}</button>
-                    ))}
+                <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl shadow-xl p-6 border-2 border-red-200">
+                    <h2 className="text-center text-xl font-bold text-red-900 mb-3">Pokemon adverse</h2>
+                    <div className="bg-white rounded-xl p-4 mb-4">
+                        <p className="text-2xl font-bold capitalize text-slate-800 text-center">{pokemonO.name}</p>
+                        <p className="text-center text-slate-600 mb-2">Niveau: <strong className="text-red-600">{level}</strong></p>
+                        <img 
+                        className="w-32 h-32 mx-auto object-contain"
+                        src={pokemonO.sprites.front_default} 
+                        alt={pokemonO.name} />
+                        <div className="mt-3">
+                            <div className="flex justify-between text-sm mb-1">
+                                <span className="font-semibold text-slate-700">HP</span>
+                                <span className="font-bold text-green-600">{hpO}</span>
+                            </div>
+                            <div className="w-full bg-slate-200 rounded-full h-3">
+                                <div 
+                                    className="bg-gradient-to-r from-green-400 to-green-600 h-3 rounded-full transition-all duration-300"
+                                    style={{width: `${Math.max(0, Math.min(100, (hpO / (Math.floor((pokemonO.stats.find(stat => stat.stat.name === 'hp').base_stat)/50 * level)) * 100)))}%`}}
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                        {pokemonO.moves.slice(0, 4).map(move=>(
+                            <button 
+                            key={move.move.name}
+                            className="bg-slate-200 rounded-lg p-3 font-semibold text-slate-500 capitalize text-sm cursor-not-allowed"
+                            disabled
+                            >
+                                {move.move.name.replace('-', ' ')}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
         </main>

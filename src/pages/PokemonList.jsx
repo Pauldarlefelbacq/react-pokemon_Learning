@@ -30,25 +30,30 @@ function App(){
     
 
     return(
-        <main className="m-2">
-            <h1 className='text-4xl font-bold text-center my-12'>pokedex</h1>
-            <div className='flex items-center justify-center mb-12 *:mx-5 '>
+        <main className="min-h-screen px-4 py-8 max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+                <h1 className='text-5xl font-bold text-slate-800 mb-3 tracking-tight'>Pokédex</h1>
+            </div>
+            
+            <div className='flex flex-wrap items-center justify-center gap-4 mb-8'>
                 <input 
                 id='search'
                 name='search'
-                placeholder='Charmander'
-                className="border p-1 mx-5 rounded-md "
+                placeholder='Search Pokemon...'
+                className="input-field w-64"
                 type="text" 
                 value={search}
                 onChange={handleChange}/>
                 
                 <button 
-                className="border rounded-xl p-2 bg-gray-200"
+                className="btn-primary"
                 onClick={handleClick}>
                     Pokemon aléatoire
                 </button>
+                
+                <Link className='btn-secondary' to="/combat">Combat</Link>
             </div>
-            <Link className='bg-blur p-2 text-red-600 hover:text-red-400 hover:text-xl hover:duration-300 font-bold' to="/combat">Aller aux combats</Link>
+            
             <Pokemon select={search} />
         </main>
     )

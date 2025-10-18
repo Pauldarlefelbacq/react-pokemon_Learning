@@ -49,21 +49,31 @@ export function Pokemon({select}){
 
     return (
         <div>
-            <select 
-            value={typeF}
-            onChange={setTypeFilter}
-            name="type" 
-            id="type">
-                <option value="all">Tous les types</option>
-                {allTypes.map(type => (
-                    <option key={type} value={type}>{type}</option>
-                ))}
-            </select>
+            <div className="mb-8 flex justify-center">
+                <select 
+                value={typeF}
+                onChange={setTypeFilter}
+                name="type" 
+                id="type"
+                className="input-field w-56 cursor-pointer">
+                    <option value="all">Tous les types</option>
+                    {allTypes.map(type => (
+                        <option key={type} value={type} className="capitalize">{type}</option>
+                    ))}
+                </select>
+            </div>
             
-            <ul className="flex flex-wrap mx-11 p-5 my-5 *:m-5 *:bg-gray-200 *:p-2 *:text-center *:rounded-xl">
+            <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                 {pokemonDataFiltered.map(pokemon => (
-                <li key={pokemon.name}>
-                    <Link to={`/pokemon/${pokemon.name}`}>{pokemon.name}<img src={pokemon.sprites.front_default} alt={pokemon.name}></img></Link>
+                <li key={pokemon.name} className="pokemon-card p-4">
+                    <Link to={`/pokemon/${pokemon.name}`} className="flex flex-col items-center">
+                        <img 
+                            src={pokemon.sprites.front_default} 
+                            alt={pokemon.name}
+                            className="w-24 h-24 object-contain"
+                        />
+                        <span className="text-slate-800 font-semibold capitalize mt-2">{pokemon.name}</span>
+                    </Link>
                 </li>
                 ))}
             </ul>
